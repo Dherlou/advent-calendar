@@ -1,14 +1,17 @@
 <script setup>
-import HeadContent from './components/HeadContent.vue';
+import Header from './components/layout/Header.vue';
 import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <HeadContent />
+  <Header />
   <RouterView />
 </template>
 
 <style>
+* {
+  box-sizing: border-box;
+}
 #app {
   display: flex;
   flex-direction: column;
