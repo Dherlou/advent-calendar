@@ -8,7 +8,7 @@ import CalendarDoor from './CalendarDoor.vue';
     </div>
 </template>
 
-<style>
+<style scoped>
 #calendar {
     background-color: rgb(255, 32, 32);
     background-image: url("/calendar-bg.jpg");
@@ -34,7 +34,7 @@ export default {
         return {
             doors: Array.from({ length: 25 }, (_, idx) => ({
                 id: idx + 1,
-                content: "Tag ${idx+1} Inhalt",
+                content: "<h1>Tag <strong>"+(idx+1)+"</strong></h1><p>Inhalt</p>",
                 background: ""/*"https://picsum.photos/200/200"*/
             }))
         }
