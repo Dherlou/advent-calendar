@@ -1,13 +1,13 @@
 <template>
-    <div :id="`door-${door.id}`" class="calendar-door" ref="door" :key="showContent"
+    <div :id="`door-${door.id}`" class="calendar-door" ref="door"
         :data-content="door.content"
         v-bind:style="{ backgroundImage: 'url(' + door.background + ')' }"
         @click="toFullScreen()">
-        <span class="calendar-label">{{ door.id }}</span>
+        <span v-if="door.id != -1" class="calendar-label">{{ door.id }}</span>
     </div>
 </template>
 
-<style scoped>
+<style>
 .calendar-door {
     aspect-ratio: 1;
     background-position: center;
@@ -30,15 +30,21 @@
     transform: translate(-50%, -50%);
 }
 
-.calendar-content {
-    z-index: 100;
-    position: fixed;
-    top: 0px;
-    left: 0px;
+.button-close {
     background: #fff;
     color: #000;
-    height: 100%;
-    width: 100%;
+    border: 1px solid #000;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    height: 2em;
+    width: 2em;
+    top: 0.8em;
+    right: 0.8em;
+    padding: 0.5em;
+    z-index: 999;
 }
 </style>
 
@@ -55,6 +61,10 @@ export default {
     methods: {
         // based on https://stackoverflow.com/a/72877897
         toFullScreen(e) {
+            if (this.$refs['door'].getAttribute('id').startsWith('door--')) {
+                return;
+            }
+
             const { top, left } = this.$refs['door'].getBoundingClientRect();
             const [keyframes, options] = this.calculateAnimation(true);
 
@@ -63,13 +73,26 @@ export default {
             fullScreen.style.setProperty('--inset', `${top}px auto auto ${left}px`);
             fullScreen.style.setProperty('position', 'fixed');
             fullScreen.addEventListener('click', this.toDoor);
-            let animation = fullScreen.animate(keyframes, options);
             fullScreen.innerHTML = fullScreen.getAttribute('data-content');
+            let animation = fullScreen.animate(keyframes, options);
+
+            let closeButton = document.createElement('div');
+            closeButton.classList.add('button-close');
+            closeButton.innerHTML = 'X';
+            closeButton.addEventListener('click', (e) => {
+                fullScreen.click();
+            });
+            animation.onfinish = (e) => {
+                fullScreen.appendChild(closeButton);
+                e.stopPropagation();
+            }
 
             this.$refs['door'].parentNode.appendChild(fullScreen);
         },
         toDoor(e) {
             const [keyframes, options] = this.calculateAnimation(false);
+
+            e.target.getElementsByClassName('button-close')[0]?.remove();
 
             let animation = e.target.animate(keyframes, options);
             animation.onfinish = () => { e.target.remove(); };
@@ -82,18 +105,20 @@ export default {
                     width: doorDim + 'px',
                     inset: 'var(--inset)',
                     background: 'transparent',
-                    color: 'transparent'
+                    color: 'transparent',
+                    opacity: 0.2
                 },
                 {
                     height: '100%',
                     width: '100%',
                     inset: 0,
                     background: '#fff',
-                    color: '#000'
+                    color: '#000',
+                    opacity: 1
                 }
             ];
             const options = {
-                duration: 2000,
+                duration: 1000,
                 easing: 'ease-in-out',
                 fill: 'forwards'
             };
