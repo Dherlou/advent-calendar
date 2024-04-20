@@ -1,13 +1,10 @@
 <template>
     <div :id="`door-${door.id}`" class="calendar-door" ref="door" :key="showContent"
+        :data-content="door.content"
         v-bind:style="{ backgroundImage: 'url(' + door.background + ')' }"
         @click="toFullScreen()">
         <span class="calendar-label">{{ door.id }}</span>
     </div>
-    <!--Transition name="calendar-modal" @enter="overlapModal"-->
-    <!--div :id="`content-${door.id}`" class="calendar-content" ref="content"
-        v-if="showContent" @click="toggle(false)" v-html="`${door.content}`"></div-->
-    <!--/Transition-->
 </template>
 
 <style scoped>
@@ -33,29 +30,6 @@
     transform: translate(-50%, -50%);
 }
 
-.full-screen {
-    position: fixed;
-    animation: go-full-screen forwards 2s ease-in-out;
-    inset: var(--inset);
-}
-
-.shrink-down {
-    animation: go-full-screen reverse backwards 2s ease-in-out !important;
-}
-
-@keyframes go-full-screen {
-    from {
-        height: 134px;
-        width: 134px;
-        inset: var(--inset);
-    }
-    to {
-        height: 100%;
-        width: 100%;
-        inset: 0;
-    }
-}
-
 .calendar-content {
     z-index: 100;
     position: fixed;
@@ -79,33 +53,52 @@ export default {
         }
     },
     methods: {
-        // see https://stackoverflow.com/a/72877897
+        // based on https://stackoverflow.com/a/72877897
         toFullScreen(e) {
             const { top, left } = this.$refs['door'].getBoundingClientRect();
-            const height = this.$refs['door'].offsetHeight;
-            const width = this.$refs['door'].offsetWidth;
-
-            console.log(`top: ${top}, left: ${left}, height: ${height}, width: ${width}`);
+            const [keyframes, options] = this.calculateAnimation(true);
 
             let fullScreen = this.$refs['door'].cloneNode(true);
 
             fullScreen.style.setProperty('--inset', `${top}px auto auto ${left}px`);
-            fullScreen.style.setProperty('height', this.$refs['door'].offsetHeight);
-            fullScreen.style.setProperty('width', this.$refs['door'].offsetWidth);
-            fullScreen.classList.add('full-screen');
-            fullScreen.addEventListener('click', this.shrink);
+            fullScreen.style.setProperty('position', 'fixed');
+            fullScreen.addEventListener('click', this.toDoor);
+            let animation = fullScreen.animate(keyframes, options);
+            fullScreen.innerHTML = fullScreen.getAttribute('data-content');
 
             this.$refs['door'].parentNode.appendChild(fullScreen);
         },
-        shrink(e) {
-            const el = e.target;
+        toDoor(e) {
+            const [keyframes, options] = this.calculateAnimation(false);
 
-            el.addEventListener('animationend', (e) => e.target.remove());
+            let animation = e.target.animate(keyframes, options);
+            animation.onfinish = () => { e.target.remove(); };
+        },
+        calculateAnimation(zoomIn) {
+            const doorDim = this.$refs['door'].offsetHeight; // = offsetWidth
+            const keyframes = [
+                {
+                    height: doorDim + 'px',
+                    width: doorDim + 'px',
+                    inset: 'var(--inset)',
+                    background: 'transparent',
+                    color: 'transparent'
+                },
+                {
+                    height: '100%',
+                    width: '100%',
+                    inset: 0,
+                    background: '#fff',
+                    color: '#000'
+                }
+            ];
+            const options = {
+                duration: 2000,
+                easing: 'ease-in-out',
+                fill: 'forwards'
+            };
 
-            el.style.animation = 'none';
-            el.offsetHeight;
-            el.style.animation = '';
-            el.classList.add('shrink-down');
+            return [zoomIn ? keyframes : keyframes.reverse(), options];
         }
     }
 }
