@@ -1,9 +1,9 @@
 <template>
-    <div :id="`door-${door.id}`" class="calendar-door" ref="door"
+    <div :id="`door-${door.date}`" class="calendar-door" ref="door"
         :data-content="door.content"
         v-bind:style="{ backgroundImage: 'url(' + door.background + ')' }"
         @click="toFullScreen()">
-        <span v-if="door.id != -1" class="calendar-label">{{ door.id }}</span>
+        <span v-if="door.date > 0" class="calendar-label">{{ door.date }}</span>
     </div>
 </template>
 
@@ -22,6 +22,8 @@
 
 .calendar-label {
     color: #eee;
+    -webkit-text-stroke-width: 1px;
+    -webkit-text-stroke-color: black;
     font-size: clamp(2rem, 1.5rem + 1.5vw, 3rem);
     font-weight: 700;
     left: 50%;
