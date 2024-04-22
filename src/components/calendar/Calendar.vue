@@ -46,8 +46,6 @@ export default {
             sort: 'order'
         });
 
-        console.log(doors);
-
         this.doors = [];
         for (var i = 0; i < doors.length; i++) {
             if (i === 12) {
