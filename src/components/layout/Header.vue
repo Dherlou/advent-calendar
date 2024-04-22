@@ -1,14 +1,16 @@
 <script setup>
 import { RouterLink } from 'vue-router'
+import { useEnv } from '../../composables/useEnv'
+import { useSettings } from '../../composables/useSettings'
 </script>
 
 <template>
     <header>
-        <img alt="Vue logo" class="logo" src="@/assets/logo.png" width="125" height="125" />
+        <img alt="Vue logo" class="logo" :src="getLogoPath()" width="125" height="125" />
 
         <div>
-            <h1>Adventskalender</h1>
-            <p>Hier findest du jeden Tag ein neues Türchen!</p>
+            <h1>{{ settings.title || 'Adventskalender' }}</h1>
+            <p>{{ settings.intro || 'Hier findest du jeden Tag ein neues Türchen!' }}</p>
 
             <nav>
                 <RouterLink to="/">Nutzerbereich</RouterLink>
@@ -55,3 +57,25 @@ nav a:first-of-type {
     border: 0;
 }
 </style>
+
+<script>
+export default {
+    data() {
+        return {
+            env: {},
+            settings: {}
+        }
+    },
+    async created() {
+        this.env = useEnv();
+        this.settings = await useSettings();
+    },
+    methods: {
+        getLogoPath() {
+            return this.settings.logo ?
+                this.env.api.getFilePath(this.settings.collectionId, this.settings.id, this.settings.logo):
+                "/src/assets/logo.png";
+        }
+    }
+}
+</script>
