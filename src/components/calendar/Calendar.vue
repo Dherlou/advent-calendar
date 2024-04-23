@@ -1,18 +1,19 @@
 <script setup>
 import PocketBase from 'pocketbase';
 import CalendarDoor from './CalendarDoor.vue';
+import { useEnv } from '../../composables/useEnv'
+import { useSettings } from '../../composables/useSettings'
 </script>
 
 <template>
-    <div id="calendar">
-        <CalendarDoor v-if="loaded" v-for="door in doors" :door="door" />
+    <div id="calendar" :style="{ backgroundImage: `url(${getBackgroundPath()})` }">
+        <CalendarDoor v-for="door in doors" :door="door" />
     </div>
 </template>
 
 <style scoped>
 #calendar {
-    background-color: rgb(255, 32, 32);
-    background-image: url("/calendar-bg.jpg");
+    background-color: rgb(255, 66, 66);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -33,37 +34,52 @@ import CalendarDoor from './CalendarDoor.vue';
 export default {
     data() {
         return {
-            // images: https://picsum.photos/200/200
-            apiBase: import.meta.env.VITE_API_BASE,
-            apiCollectionPrefix: import.meta.env.VITE_API_COLLECTION_PREFIX,
-            loaded: false
+            env: {},
+            settings: {},
+            doors: []
         }
     },
     async created() {
-        const pb = new PocketBase(this.apiBase);
+        this.env = useEnv();
+        this.settings = await useSettings();
+        this.doors = await this.loadDoors();
+    },
+    methods: {
+        async loadDoors() {
+            const pb = new PocketBase(this.env.api.base);
 
-        const doors = await pb.collection(this.apiCollectionPrefix+'doors').getFullList({
-            sort: 'order'
-        });
+            const doors = await pb.collection(this.env.api.collectionPrefix+'doors').getFullList({
+                sort: 'order'
+            });
 
-        this.doors = [];
-        for (var i = 0; i < doors.length; i++) {
-            if (i === 12) {
-                this.doors.push({
-                    date: -1,
-                    content: '',
-                    background: 'TODO' // use settings entry propagated here
+            const retDoors = [];
+            for (var i = 0; i < doors.length; i++) {
+                if (i === 12) {
+                    retDoors.push({
+                        date: -1,
+                        content: '',
+                        background: this.settings.center ?
+                            this.env.api.getFilePath(this.settings.collectionId, this.settings.id, this.settings.center) :
+                            '/src/assets/images/cal-center-bg.png'
+                    });
+                }
+
+                retDoors.push({
+                    date: new Date(doors[i].date).getDate(),
+                    content: doors[i].content,
+                    background: doors[i].background ?
+                        this.env.api.getFilePath(doors[i].collectionId, doors[i].id, doors[i].background) :
+                        doors[i].background
                 });
             }
 
-            this.doors.push({
-                date: new Date(doors[i].date).getDate(),
-                content: doors[i].content,
-                background: this.apiBase+'/api/files/'+doors[i].collectionId+'/'+doors[i].id+'/'+doors[i].background
-            });
+            return retDoors;
+        },
+        getBackgroundPath() {
+            return this.settings.background ?
+                this.env.api.getFilePath(this.settings.collectionId, this.settings.id, this.settings.background) :
+                '/src/assets/images/cal-bg.png';
         }
-
-        this.loaded = true;
     }
 }
 </script>
