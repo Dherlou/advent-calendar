@@ -1,7 +1,8 @@
 <template>
     <div :id="`door-${door.date}`" class="calendar-door" ref="door"
-        :data-content="door.content"
-        v-bind:style="{ backgroundImage: 'url(' + door.background + ')' }"
+        :data-content="`<div class='calendar-content'>${door.content}</div>`"
+        :data-padding="door.padding || '0px'"
+        v-bind:style="{ backgroundImage: 'url(' + door.background + ') !important' }"
         @click="toFullScreen()">
         <span v-if="door.date > 0" class="calendar-label">{{ door.date }}</span>
     </div>
@@ -10,14 +11,29 @@
 <style>
 .calendar-door {
     aspect-ratio: 1;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+    background-position: center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
     border: 1px solid #ccc;
     border-radius: 0.5rem;
     box-shadow: 0 1px 3px 1px rgba(71, 71, 71, .5);
     overflow: hidden;
     position: relative;
+    z-index: 1;
+}
+
+.calendar-door-open:after {
+  content: "";
+  position: fixed;
+  top: 0; bottom: 0; left: 0; right: 0; 
+  background: rgba(255,255,255,0.8);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.calendar-content {
+    position: absolute;
+    z-index: 3;
 }
 
 .calendar-label {
@@ -37,6 +53,7 @@
     color: #000;
     border: 1px solid #000;
     border-radius: 50%;
+    cursor: pointer;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,11 +86,12 @@ export default {
 
             const { top, left } = this.$refs['door'].getBoundingClientRect();
             const [keyframes, options] = this.calculateAnimation(true);
-
-            let fullScreen = this.$refs['door'].cloneNode(true);
+            const fullScreen = this.$refs['door'].cloneNode(true);
 
             fullScreen.style.setProperty('--inset', `${top}px auto auto ${left}px`);
             fullScreen.style.setProperty('position', 'fixed');
+            fullScreen.style.setProperty('padding', fullScreen.getAttribute('data-padding'));
+            fullScreen.classList.add('calendar-door-open');
             fullScreen.addEventListener('click', this.toDoor);
             fullScreen.innerHTML = fullScreen.getAttribute('data-content');
             let animation = fullScreen.animate(keyframes, options);

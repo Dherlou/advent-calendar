@@ -69,7 +69,8 @@ export default {
                     content: doors[i].content,
                     background: doors[i].background ?
                         this.env.api.getFilePath(doors[i].collectionId, doors[i].id, doors[i].background) :
-                        doors[i].background
+                        doors[i].background,
+                    padding: doors[i].padding
                 });
             }
 
