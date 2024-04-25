@@ -84,30 +84,40 @@ export default {
                 return;
             }
 
+            const [fullScreen, animation] = this.createFullScreen();
+            const closeButton = this.createCloseButton();
+            
+            animation.onfinish = (e) => {
+                fullScreen.appendChild(closeButton);
+            };
+            closeButton.addEventListener('click', (e) => {
+                fullScreen.click();
+            });
+
+            this.$refs['door'].parentNode.appendChild(fullScreen);
+        },
+        createFullScreen() {
             const { top, left } = this.$refs['door'].getBoundingClientRect();
             const [keyframes, options] = this.calculateAnimation(true);
             const fullScreen = this.$refs['door'].cloneNode(true);
 
+            fullScreen.id += '-fullscreen';
             fullScreen.style.setProperty('--inset', `${top}px auto auto ${left}px`);
             fullScreen.style.setProperty('position', 'fixed');
             fullScreen.style.setProperty('padding', fullScreen.getAttribute('data-padding'));
             fullScreen.classList.add('calendar-door-open');
             fullScreen.addEventListener('click', this.toDoor);
             fullScreen.innerHTML = fullScreen.getAttribute('data-content');
-            let animation = fullScreen.animate(keyframes, options);
 
-            let closeButton = document.createElement('div');
+            return [fullScreen, fullScreen.animate(keyframes, options)];
+        },
+        createCloseButton() {
+            const closeButton = document.createElement('div');
+
             closeButton.classList.add('button-close');
             closeButton.innerHTML = 'X';
-            closeButton.addEventListener('click', (e) => {
-                fullScreen.click();
-            });
-            animation.onfinish = (e) => {
-                fullScreen.appendChild(closeButton);
-                e.stopPropagation();
-            }
 
-            this.$refs['door'].parentNode.appendChild(fullScreen);
+            return closeButton;
         },
         toDoor(e) {
             const [keyframes, options] = this.calculateAnimation(false);
