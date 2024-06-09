@@ -49,13 +49,16 @@ export default {
             error: null
         };
     },
+    emits: [
+        'refreshAuth'
+    ],
     methods: {
         async login() {
             const pb = await usePocketBase();
 
             try {
                 await pb.collection('users').authWithPassword(this.username || '', this.password || '');
-                this.$emit('refresh');
+                this.$emit('refreshAuth');
             } catch (error) {
                 this.error = "Ungültiger Benutzername und/oder Passwort!";
             }

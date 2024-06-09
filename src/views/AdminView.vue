@@ -1,13 +1,14 @@
 <script setup>
-import Login from '../components/login/Login.vue'
+import Login from '../components/auth/Login.vue';
+import { RouterView } from 'vue-router';
 import { usePocketBase } from '../composables/usePocketBase';
 </script>
 
 <template>
   <main class="w-100">
     <v-sheet class="bg-grey-darken-4 pa-6 border-surface-bright border-sm rounded-lg" rounded>
-      <Login v-if="!pb?.authStore.isValid" @refresh="refreshAuthStateView"/>
-      <button v-else @click="logout">Ausloggen</button>
+      <Login v-if="!pb?.authStore.isValid" @refreshAuth="refreshAuthView"/>
+      <RouterView v-else @refreshAuth="refreshAuthView"/>
     </v-sheet>
   </main>
 </template>
@@ -20,15 +21,11 @@ export default {
       }
     },
     async created() {
-        return this.refreshAuthStateView();
+        return this.refreshAuthView();
     },
     methods: {
-      async refreshAuthStateView() {
+      async refreshAuthView() {
         this.pb = await usePocketBase();
-      },
-      logout() {
-        this.pb.authStore.clear();
-        this.refreshAuthStateView();
       }
     }
 }
