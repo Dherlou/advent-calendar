@@ -1,19 +1,23 @@
 <script setup>
-
+import { usePocketBase } from '../../composables/usePocketBase'
 </script>
 
 <template>
     <v-card class="mx-auto w-50 px-6 py-8">
-        <v-form class="d-flex flex-column">
+        <v-form class="d-flex flex-column" v-on:submit.prevent="login">
             <v-text-field
+                v-model="username"
                 label="Benutzername"
                 variant="outlined"
             ></v-text-field>
             <v-text-field
+                v-model="password"
+                v-on:keyup.13="login"
                 label="Passwort"
                 type="password"
                 variant="outlined"
             ></v-text-field>
+            <span v-if="error" class="error">{{error}}</span>
 
             <br/>
     
@@ -31,25 +35,33 @@
 </template>
 
 <style scoped>
-#calendar {
-    background-color: rgb(255, 66, 66);
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    border: 1px solid #fff;
-    border-radius: 0.6rem;
-    gap: 2rem;
-    display: grid;
-    grid-template-columns: auto auto auto auto auto;
-    grid-template-rows: auto;
-    height: auto;
-    padding: 2rem;
-    margin: 0 auto;
-    width: 100%;
+.error {
+    color: red;
 }
 </style>
 
 <script>
 export default {
+    data() {
+        return {
+            username: null,
+            password: null,
+            error: null
+        };
+    },
+    methods: {
+        async login() {
+            const pb = await usePocketBase();
+
+            try {
+                await pb.collection('users').authWithPassword(this.username || '', this.password || '');
+                this.$emit('refresh');
+            } catch (error) {
+                this.error = "Ungültiger Benutzername und/oder Passwort!";
+            }
+
+            return Promise.resolve();
+        }
+    }
 }
 </script>

@@ -1,8 +1,8 @@
 <script setup>
-import PocketBase from 'pocketbase';
 import CalendarDoor from './CalendarDoor.vue';
-import { useEnv } from '../../composables/useEnv'
-import { useSettings } from '../../composables/useSettings'
+import { useEnv } from '../../composables/useEnv';
+import { usePocketBase } from '../../composables/usePocketBase';
+import { useSettings } from '../../composables/useSettings';
 </script>
 
 <template>
@@ -46,7 +46,7 @@ export default {
     },
     methods: {
         async loadDoors() {
-            const pb = new PocketBase(this.env.api.base);
+            const pb = await usePocketBase();
 
             const doors = await pb.collection(this.env.api.collectionPrefix+'doors').getFullList({
                 sort: 'order'
