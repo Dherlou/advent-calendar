@@ -1,12 +1,9 @@
 <script setup>
 import { RouterLink } from 'vue-router'
-import { useFavicon } from '@vueuse/core'
-import { useEnv } from '../../composables/useEnv'
-import { useSettings } from '../../composables/useSettings'
 </script>
 
 <template>
-    <nav>
+    <nav class="mt-0 mb-3">
         <RouterLink to="/admin/doors">Türchen</RouterLink>
         <RouterLink to="/admin/settings">Einstellungen</RouterLink>
         <RouterLink to="/admin/logout">Ausloggen</RouterLink>
