@@ -14,9 +14,23 @@ a,
   transition: 0.4s;
   padding: 3px;
 }
-
 @media (hover: hover) {
   a:hover {
     background-color: hsla(160, 100%, 37%, 0.2);
   }
+}
+
+button[type='submit'] {
+  background-color: hsla(160, 100%, 37%, 0.8);
+  color: white;
+}
+@media (hover: hover) {
+  button[type='submit']:hover {
+    background-color: hsla(160, 100%, 37%, 0.6);
+  }
+}
+
+/* hide calculated space for vue validates */
+.v-input__details:not(#fake) {
+  display: none;
 }
