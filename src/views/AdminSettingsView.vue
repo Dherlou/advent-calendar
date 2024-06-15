@@ -25,6 +25,7 @@ import { useSettings } from '../composables/useSettings';
         />
 
         <ImageField
+          :clearable="!!settings['logo']"
           height="125px"
           label="Logo"
           name="logo"
@@ -32,7 +33,6 @@ import { useSettings } from '../composables/useSettings';
           @onFieldChange="onFieldChange"
         />
 
-        <v-text-field v-model="settings['logo']" label="Logo" variant="outlined"></v-text-field>
         <v-text-field v-model="settings['title']" label="Titel" variant="outlined"></v-text-field>
         <v-textarea v-model="settings['intro']" label="Einleitung" variant="outlined"></v-textarea>
 
