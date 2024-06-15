@@ -7,7 +7,7 @@ import { useSettings } from '../../composables/useSettings'
 
 <template>
     <header>
-        <img alt="Vue logo" class="logo" :src="getLogoPath()" width="125" height="125" />
+        <img alt="Vue logo" class="logo" :src="getLogoPath()" width="auto" height="100%" />
 
         <div>
             <h1>{{ settings.title || 'Adventskalender' }}</h1>
@@ -33,6 +33,7 @@ header {
 .logo {
     display: block;
     margin: 0 2rem 0 0;
+    max-height: 175px;
 }
 
 nav {
