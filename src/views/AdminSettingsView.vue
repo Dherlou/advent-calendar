@@ -16,10 +16,19 @@ import { useSettings } from '../composables/useSettings';
 
         <ImageField
           accept="image/x-icon"
-          height="100%"
+          :clearable="!!settings['favicon']"
+          height="32px"
           label="Favicon"
           name="favicon"
           :url="getImageURL('favicon', '/src/assets/images/logo.png')"
+          @onFieldChange="onFieldChange"
+        />
+
+        <ImageField
+          height="125px"
+          label="Logo"
+          name="logo"
+          :url="getImageURL('logo', '/src/assets/images/logo.png')"
           @onFieldChange="onFieldChange"
         />
 
@@ -52,6 +61,7 @@ export default {
     this.env = useEnv();
     this.pb = await usePocketBase();
     this.loadSettings();
+    console.log(this.settings['favicon']);
   },
   methods: {
     async loadSettings() {
