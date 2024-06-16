@@ -1,5 +1,6 @@
 <script setup>
 import ImageField from '../components/form/ImageField.vue';
+import TextField from '../components/form/TextField.vue';
 import AdminNavigation from '../components/layout/AdminNavigation.vue';
 import { useEnv } from '../composables/useEnv';
 import { usePocketBase } from '../composables/usePocketBase';
@@ -33,12 +34,32 @@ import { useSettings } from '../composables/useSettings';
           @onFieldChange="onFieldChange"
         />
 
-        <v-text-field v-model="settings['title']" label="Titel" variant="outlined"></v-text-field>
+        <TextField
+          label="Titel"
+          name="title"
+          :model="settings['title']"
+          @onFieldChange="onFieldChange"
+        />
+
         <v-textarea v-model="settings['intro']" label="Einleitung" variant="outlined"></v-textarea>
 
-        <v-card-subtitle class="mb-3 font-weight-medium">Kalender</v-card-subtitle>
-        <v-text-field v-model="settings['background']" label="Hintergrund" variant="outlined"></v-text-field>
-        <v-text-field v-model="settings['center']" label="Mitteltürchen" variant="outlined"></v-text-field>
+        <v-card-subtitle class="mt-10 mb-3 font-weight-medium">Kalender</v-card-subtitle>
+        <ImageField
+          :clearable="!!settings['background']"
+          height="125px"
+          label="Hintergrund"
+          name="background"
+          :url="getImageURL('background', '/src/assets/images/cal-bg.png')"
+          @onFieldChange="onFieldChange"
+        />
+        <ImageField
+          :clearable="!!settings['center']"
+          height="125px"
+          label="Mitteltürchen"
+          name="center"
+          :url="getImageURL('center', '/src/assets/images/cal-center-bg.png')"
+          @onFieldChange="onFieldChange"
+        />
       </v-form>
     </v-card-text>
   </v-card>
@@ -61,7 +82,6 @@ export default {
     this.env = useEnv();
     this.pb = await usePocketBase();
     this.loadSettings();
-    console.log(this.settings['favicon']);
   },
   methods: {
     async loadSettings() {

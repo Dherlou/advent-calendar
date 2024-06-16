@@ -8,13 +8,23 @@
       :clearable="clearable"
       :key="url"
       :label="label"
-      prepend-icon=""
       @change="onFieldChange"
       variant="outlined"
     />
     <div class="d-flex flex-column align-center ms-3">
-      <img :alt="name" :src="url" width="auto" :height="height" />
-      <v-btn v-if="clearable" density="compact" rounded="xl" size="small" variant="outlined" @click="clearField">Löschen</v-btn>
+      <img
+        :alt="name"
+        :src="url"
+        :height="height"
+        width="auto"
+      />
+      <v-btn v-if="clearable"
+        density="compact"
+        rounded="xl"
+        size="small"
+        variant="outlined"
+        @click="clearField"
+      >Löschen</v-btn>
     </div>
   </div>
 </template>
