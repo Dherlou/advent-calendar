@@ -7,7 +7,7 @@ export async function usePocketBase() {
     const pb = new PocketBase(env.api.base);
 
     try {
-        // get an up-to-date auth store state by veryfing and refreshing the loaded auth model (if any)
+        // get an up-to-date auth store state by verifying and refreshing the loaded auth model (if any)
         pb.authStore.isValid && await pb.collection('users').authRefresh();
     } catch (_) {
         // clear the auth store on failed refresh
