@@ -1,10 +1,10 @@
 <template>
-    <div :id="`door-${door.date}`" class="calendar-door" ref="door"
+    <div :id="`door-${door.id}`" class="calendar-door" ref="door"
         :data-content="`<div class='calendar-content'>${door.content}</div>`"
         :data-padding="door.padding || '0px'"
-        v-bind:style="{ backgroundImage: 'url(' + door.background + ') !important' }"
-        @click="toFullScreen()">
-        <span v-if="door.date > 0" class="calendar-label">{{ door.date }}</span>
+        v-bind:style="getStyle()"
+        @click="open()">
+        <span v-if="door.date" class="calendar-label">{{ door.id }}</span>
     </div>
 </template>
 
@@ -74,10 +74,38 @@ export default {
     ],
     data() {
         return {
-            showContent: false
+            hasBeenOpened: false
         }
     },
+    created() {
+        this.hasBeenOpened = this.door.id === -1 ?
+            true :
+            (localStorage.getItem(this.door.id) ?? false);
+    },
     methods: {
+        open(e) {
+            if (this.door.id === -1) {
+                return;
+            }
+
+            let now = new Date().toISOString().split('T')[0];
+            if (this.door.date <= now) {
+                this.hasBeenOpened = true;
+            }
+
+            if (!this.hasBeenOpened) {
+                return;
+            }
+
+            this.toFullScreen(e);
+        },
+        getStyle() {
+            return this.hasBeenOpened ?
+                {
+                    backgroundImage: 'url(' + this.door.background + ') !important'
+                } :
+                {};
+        },
         // based on https://stackoverflow.com/a/72877897
         toFullScreen(e) {
             if (this.$refs['door'].getAttribute('id').startsWith('door--')) {
@@ -154,6 +182,11 @@ export default {
             };
 
             return [zoomIn ? keyframes : keyframes.reverse(), options];
+        }
+    },
+    watch: {
+        hasBeenOpened: function() {
+            localStorage.setItem(this.door.id, this.hasBeenOpened);
         }
     }
 }

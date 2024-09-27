@@ -56,7 +56,8 @@ export default {
             for (var i = 0; i < doors.length; i++) {
                 if (i === 12) {
                     retDoors.push({
-                        date: -1,
+                        id: -1,
+                        date: '',
                         content: '',
                         background: this.settings.center ?
                             this.env.api.getFilePath(this.settings.collectionId, this.settings.id, this.settings.center) :
@@ -64,8 +65,10 @@ export default {
                     });
                 }
 
+                let date = doors[i].date.split(' ')[0];
                 retDoors.push({
-                    date: new Date(doors[i].date).getDate(),
+                    id: parseInt(date.split('-')[2]),
+                    date,
                     content: doors[i].content,
                     background: doors[i].background ?
                         this.env.api.getFilePath(doors[i].collectionId, doors[i].id, doors[i].background) :
