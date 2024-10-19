@@ -1,5 +1,5 @@
 import PocketBase from 'pocketbase';
-import { useEnv } from './useEnv';
+import { useEnv } from '@/composables/useEnv';
 
 export async function usePocketBase() {
 

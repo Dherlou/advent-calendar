@@ -1,5 +1,5 @@
 <script setup>
-import AdminNavigation from '../components/layout/AdminNavigation.vue'
+import AdminNavigation from '@/components/layout/AdminNavigation.vue'
 </script>
 
 <template>

@@ -1,5 +1,5 @@
-import { useEnv } from './useEnv'
-import { usePocketBase } from './usePocketBase';
+import { useEnv } from '@/composables/useEnv'
+import { usePocketBase } from '@/composables/usePocketBase';
 
 export async function useSettings() {
 

@@ -1,6 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router';
-import { usePocketBase } from '../../composables/usePocketBase';
+import { usePocketBase } from '@/composables/usePocketBase';
 </script>
 
 <template>

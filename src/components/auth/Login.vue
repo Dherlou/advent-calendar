@@ -1,5 +1,5 @@
 <script setup>
-import { usePocketBase } from '../../composables/usePocketBase'
+import { usePocketBase } from '@/composables/usePocketBase'
 </script>
 
 <template>

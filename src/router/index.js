@@ -1,9 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import AdminView from '../views/AdminView.vue'
-import AdminDoorsView from '../views/AdminDoorsView.vue'
-import AdminSettingsView from '../views/AdminSettingsView.vue'
-import Logout from '../components/auth/Logout.vue'
-import UserView from '../views/UserView.vue'
+import AdminView from '@/views/AdminView.vue'
+import AdminDoorsView from '@/views/AdminDoorsView.vue'
+import AdminSettingsView from '@/views/AdminSettingsView.vue'
+import Logout from '@/components/auth/Logout.vue'
+import UserView from '@/views/UserView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

@@ -1,10 +1,13 @@
 <script setup>
-import ImageField from '../components/form/ImageField.vue';
-import TextField from '../components/form/TextField.vue';
-import AdminNavigation from '../components/layout/AdminNavigation.vue';
-import { useEnv } from '../composables/useEnv';
-import { usePocketBase } from '../composables/usePocketBase';
-import { useSettings } from '../composables/useSettings';
+import DefaultLogo from '@/assets/images/logo.png';
+import DefaultCalendarBackground from '@/assets/images/cal-bg.png';
+import DefaultCalenderCenterBackground from '@/assets/images/cal-center-bg.png';
+import ImageField from '@/components/form/ImageField.vue';
+import TextField from '@/components/form/TextField.vue';
+import AdminNavigation from '@/components/layout/AdminNavigation.vue';
+import { useEnv } from '@/composables/useEnv';
+import { usePocketBase } from '@/composables/usePocketBase';
+import { useSettings } from '@/composables/useSettings';
 </script>
 
 <template>
@@ -21,7 +24,7 @@ import { useSettings } from '../composables/useSettings';
           height="32px"
           label="Favicon"
           name="favicon"
-          :url="getImageURL('favicon', '/src/assets/images/logo.png')"
+          :url="getImageURL('favicon', DefaultLogo)"
           @onFieldChange="onFieldChange"
         />
 
@@ -30,7 +33,7 @@ import { useSettings } from '../composables/useSettings';
           height="125px"
           label="Logo"
           name="logo"
-          :url="getImageURL('logo', '/src/assets/images/logo.png')"
+          :url="getImageURL('logo', DefaultLogo)"
           @onFieldChange="onFieldChange"
         />
 
@@ -49,7 +52,7 @@ import { useSettings } from '../composables/useSettings';
           height="125px"
           label="Hintergrund"
           name="background"
-          :url="getImageURL('background', '/src/assets/images/cal-bg.png')"
+          :url="getImageURL('background', DefaultCalendarBackground)"
           @onFieldChange="onFieldChange"
         />
         <ImageField
@@ -57,7 +60,7 @@ import { useSettings } from '../composables/useSettings';
           height="125px"
           label="Mitteltürchen"
           name="center"
-          :url="getImageURL('center', '/src/assets/images/cal-center-bg.png')"
+          :url="getImageURL('center', DefaultCalenderCenterBackground)"
           @onFieldChange="onFieldChange"
         />
       </v-form>

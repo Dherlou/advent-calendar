@@ -1,8 +1,9 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import { useFavicon } from '@vueuse/core'
-import { useEnv } from '../../composables/useEnv'
-import { useSettings } from '../../composables/useSettings'
+import DefaultLogo from '@/assets/images/logo.png'
+import { useEnv } from '@/composables/useEnv'
+import { useSettings } from '@/composables/useSettings'
 </script>
 
 <template>
@@ -81,7 +82,7 @@ export default {
         getLogoPath() {
             return this.settings.logo ?
                 this.env.api.getFilePath(this.settings.collectionId, this.settings.id, this.settings.logo):
-                "/src/assets/images/logo.png";
+                DefaultLogo;
         }
     }
 }

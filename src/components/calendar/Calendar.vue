@@ -1,8 +1,10 @@
 <script setup>
-import CalendarDoor from './CalendarDoor.vue';
-import { useEnv } from '../../composables/useEnv';
-import { usePocketBase } from '../../composables/usePocketBase';
-import { useSettings } from '../../composables/useSettings';
+import DefaultCalendarBackground from '@/assets/images/cal-bg.png';
+import DefaultCalenderCenterBackground from '@/assets/images/cal-center-bg.png';
+import CalendarDoor from '@/components/calendar/CalendarDoor.vue';
+import { useEnv } from '@/composables/useEnv';
+import { usePocketBase } from '@/composables/usePocketBase';
+import { useSettings } from '@/composables/useSettings';
 </script>
 
 <template>
@@ -61,7 +63,7 @@ export default {
                         content: '',
                         background: this.settings.center ?
                             this.env.api.getFilePath(this.settings.collectionId, this.settings.id, this.settings.center) :
-                            '/src/assets/images/cal-center-bg.png'
+                            DefaultCalenderCenterBackground
                     });
                 }
 
@@ -82,7 +84,7 @@ export default {
         getBackgroundPath() {
             return this.settings.background ?
                 this.env.api.getFilePath(this.settings.collectionId, this.settings.id, this.settings.background) :
-                '/src/assets/images/cal-bg.png';
+                DefaultCalendarBackground;
         }
     }
 }

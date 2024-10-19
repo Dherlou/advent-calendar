@@ -1,7 +1,7 @@
 <script setup>
-import Login from '../components/auth/Login.vue';
 import { RouterView } from 'vue-router';
-import { usePocketBase } from '../composables/usePocketBase';
+import Login from '@/components/auth/Login.vue';
+import { usePocketBase } from '@/composables/usePocketBase';
 </script>
 
 <template>
