@@ -1,7 +1,10 @@
 services:
   advent-calendar:
     container_name: advent-calendar
-    build: .
+    build:
+      context: .
+      args:
+        - VITE_APP_BASE_PATH=$VITE_APP_BASE_PATH
     restart: always
     networks:
       - jenkins

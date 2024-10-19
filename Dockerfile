@@ -8,6 +8,7 @@ RUN npm run build
 
 # production stage
 FROM nginx:stable-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
+ARG VITE_APP_BASE_PATH='/'
+COPY --from=build-stage /app/dist /usr/share/nginx/html$VITE_APP_BASE_PATH
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
