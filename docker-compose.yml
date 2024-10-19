@@ -1,0 +1,10 @@
+services:
+  advent-calendar:
+    container_name: advent-calendar
+    build: .
+    restart: always
+    networks:
+      - jenkins
+networks:
+  jenkins:
+    external: true

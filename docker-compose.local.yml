@@ -1,0 +1,4 @@
+services:
+  advent-calendar:
+    ports:
+      - "80:80"
