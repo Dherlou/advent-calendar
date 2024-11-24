@@ -11,8 +11,8 @@ import { useSettings } from '@/composables/useSettings'
         <img alt="Vue logo" class="logo" :src="getLogoPath()" width="auto" height="100%" />
 
         <div>
-            <h1>{{ settings.title || 'Adventskalender' }}</h1>
-            <p>{{ settings.intro || 'Hier findest du jeden Tag ein neues Türchen!' }}</p>
+            <h1 class="title">{{ settings.title || 'Adventskalender' }}</h1>
+            <div class="intro" v-html="settings.intro || 'Hier findest du jeden Tag ein neues Türchen!'"></div>
 
             <nav>
                 <RouterLink to="/">Nutzerbereich</RouterLink>
@@ -22,9 +22,17 @@ import { useSettings } from '@/composables/useSettings'
     </header>
 </template>
 
+<style>
+.intro > p {
+    margin-bottom: 0.5em;
+}
+
+</style>
 <style scoped>
 header {
     display: flex;
+    justify-content: center;
+    align-items: center;
     line-height: 1.5;
     max-height: 100vh;
     padding-bottom: 2rem;
@@ -35,6 +43,10 @@ header {
     display: block;
     margin: 0 2rem 0 0;
     max-height: 175px;
+}
+
+.title {
+    margin-bottom: 0.25em;
 }
 
 nav {
